@@ -1,0 +1,123 @@
+<html ng-app="BillCalculator">
+    <head>
+        <!-- from Google Hosted Libraries -->
+        <script src="angular.min.js"></script>
+        <script lang="javascript">
+        
+            var myModule = angular.module('BillCalculator', []);
+            
+            myModule.controller('BillController', 
+
+                function ($scope) {
+                    
+                    var bc = this;
+                    
+                    bc.cost = 0;
+
+                    
+                    function update(){
+                        bc.tax =  bc.cost * bc.state.amount ;    
+                        bc.tipAmount = (parseFloat(bc.cost) + bc.tax) * bc.tip.amount; 
+                        bc.final_bill = parseFloat(bc.cost) + bc.tax + bc.tipAmount;
+                    }
+                    
+                    //used to detect when cost changes
+                    $scope.$watch('bc.cost', update);
+                    $scope.$watch('bc.tip', update);
+                    $scope.$watch('bc.state', update);
+
+                    
+                    //state options
+                    bc.state_options = [
+                        {amount:0.04, name:"AL"},
+                        {amount:0.0, name:"AK"},
+                        {amount:0.056, name:"AZ"},
+                        {amount:0.065, name:"AR"},
+                        {amount:0.075, name:"CA"},
+                        {amount:0.029, name:"CO"},
+                        {amount:0.0635, name:"CT"},
+                        {amount:0.0, name:"DE"},
+                        {amount:0.06, name:"FL"},
+                        {amount:0.04, name:"GA"},
+                        {amount:0.04, name:"HI"},
+                        {amount:0.06, name:"ID"},
+                        {amount:0.0625, name:"IL"},
+                        {amount:0.07, name:"IN"},
+                        {amount:0.06, name:"IA"},
+                        {amount:0.065, name:"KS"},
+                        {amount:0.06, name:"KY"},
+                        {amount:0.04, name:"LA"},
+                        {amount:0.055, name:"ME"},
+                        {amount:0.06, name:"MD"},
+                        {amount:0.0625, name:"MA"},
+                        {amount:0.06, name:"MI"},
+                        {amount:0.06875, name:"MN"},
+                        {amount:0.07, name:"MS"},
+                        {amount:0.04225, name:"MO"},
+                        {amount:0.0, name:"MT"},
+                        {amount:0.055, name:"NE"},
+                        {amount:0.0685, name:"NV"},
+                        {amount:0.0, name:"NH"},
+                        {amount:0.07, name:"NJ"},
+                        {amount:0.05125, name:"NM"},
+                        {amount:0.04, name:"NY"},
+                        {amount:0.0475, name:"NC"},
+                        {amount:0.05, name:"ND"},
+                        {amount:0.0575, name:"OH"},
+                        {amount:0.045, name:"OK"},
+                        {amount:0.0, name:"OR"},
+                        {amount:0.06, name:"PA"},
+                        {amount:0.07, name:"RI"},
+                        {amount:0.06, name:"SC"},
+                        {amount:0.04, name:"SD"},
+                        {amount:0.07, name:"TN"},
+                        {amount:0.0625, name:"TX"},
+                        {amount:0.0595, name:"UT"},
+                        {amount:0.06, name:"VT"},
+                        {amount:0.053, name:"VA"},
+                        {amount:0.065, name:"WA"},
+                        {amount:0.06, name:"WV"},
+                        {amount:0.05, name:"WI"},
+                        {amount:0.04, name:"WY"},
+                        {amount:0.0575, name:"D.C."}
+                    ];
+                    
+                    bc.state = bc.state_options[0];
+                    
+                    bc.tip_options = [
+                        {amount:0.10, name:"10%"},
+                        {amount:0.15, name:"15%"},
+                        {amount:0.20, name:"20%"},
+                    ];
+                    
+                    bc.tip = bc.tip_options[0];
+                }
+            );
+        </script>
+    </head>
+    <body>
+        <div ng-controller="BillController as bc">
+            <h1>Restaurant Bill Calculator</h1>
+            <p>
+                Cost: <input type="text" ng-model="bc.cost" placeholder="Enter Meal Cost" /><br/>
+                State: <select ng-model="bc.state" ng-options="s.name for s in bc.state_options"></select>
+                Tip: <select ng-model="bc.tip" ng-options="s.name for s in bc.tip_options"></select>
+            </p>
+            <p>
+                <!-- the angular directive both associates with the cost model and
+                uses a built-in formatting capability -->
+                Cost: {{bc.cost|currency}}
+            </p>
+            <p>
+                State Tax: {{bc.tax|currency}}
+            </p>
+            <p>
+                Tip: {{bc.tipAmount|currency}}
+               <!-- <button ng-click="bc.add()">Add</button>-->
+            </p>
+            <p>
+                Final Bill: {{bc.final_bill|currency}}
+            </p>
+        </div>
+    </body>
+</html>
